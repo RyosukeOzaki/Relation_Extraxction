@@ -1,201 +1,112 @@
-Datasets of Annotated Semantic Relationships
-============================================
+# Relation Extraction
 
-This repository contains annotated datasets which can be used to train supervised models for the task of semantic relationship extraction. If you know any more datasets, and want to contribute, please, notify me or submit a PR.
+Relationship extraction is the task of extracting semantic relationships from a text. Extracted relationships usually
+occur between two or more entities of a certain type (e.g. Person, Organisation, Location) and fall into a number of
+semantic categories (e.g. married to, employed by, lives in).
 
-It's divided in 3 groups:
+### New York Times Corpus
 
-[__Traditional Information Extraction__](#tie): relationships are manually annotated, and belongs to pre-determined type.
+The standard corpus for distantly supervised relationship extraction is the New York Times (NYT) corpus, published in
+[Riedel et al, 2010](http://www.riedelcastro.org//publications/papers/riedel10modeling.pdf).
 
-[__Open Information Extraction__](#oie): relationships are manually annotated, but don't have any specific type.
+This contains text from the [New York Times Annotated Corpus](https://catalog.ldc.upenn.edu/ldc2008t19) with named
+entities extracted from the text using the Stanford NER system and automatically linked to entities in the Freebase
+knowledge base. Pairs of named entities are labelled with relationship types by aligning them against facts in the
+Freebase knowledge base. (The process of using a separate database to provide label is known as 'distant supervision')
 
-[__Distantly Supervised__](#ds): relationships are annotated by appying some [Distant Supervision](https://www.aclweb.org/anthology/P09-1113) technique and are pre-determined.
+Example:
+ > **Elevation Partners**, the $1.9 billion private equity group that was founded by **Roger McNamee**
 
-<br><br>
+ `(founded_by, Elevation_Partners, Roger_McNamee)`
 
-<a name="tie"></a>
-# Traditional Information Extraction
+Different papers have reported various metrics since the release of the dataset, making it difficult to compare systems
+directly. The main metrics used are either precision at N results or plots of the precision-recall. The range of recall
+has increased over the years as systems improve, with earlier systems having very low precision at 30% recall.
 
-### DBpediaRelations-PT
 
-**Dateset**: [DBpediaRelations-PT-0.2.txt.bz2](datasets/DBpediaRelations-PT-0.2.txt.bz2)
+| Model                               | P@10% | P@30% | Paper / Source | Code           |
+| ----------------------------------- | ----- | ----- | --------------- | -------------- |
+| RESIDE (Vashishth et al., 2018)         | 73.6   | 59.5   | [RESIDE: Improving Distantly-Supervised Neural Relation Extraction using Side Information](http://malllabiisc.github.io/publications/papers/reside_emnlp18.pdf) | [RESIDE](https://github.com/malllabiisc/RESIDE) |
+| PCNN+ATT (Lin et al., 2016)         | 69.4   | 51.8   | [Neural Relation Extraction with Selective Attention over Instances](http://www.aclweb.org/anthology/P16-1200) | [OpenNRE](https://github.com/thunlp/OpenNRE/) |
+| MIML-RE (Surdeneau et al., 2012)    | 60.7+  |   -   | [Multi-instance Multi-label Learning for Relation Extraction](http://www.aclweb.org/anthology/D12-1042) | [Mimlre](https://nlp.stanford.edu/software/mimlre.shtml) |
+| MultiR (Hoffman et al., 2011)       | 60.9+  |   -   | [Knowledge-Based Weak Supervision for Information Extraction of Overlapping Relations](http://www.aclweb.org/anthology/P11-1055) | [MultiR](http://aiweb.cs.washington.edu/ai/raphaelh/mr/) |
+| (Mintz et al., 2009)                | 39.9+  |   -   | [Distant supervision for relation extraction without labeled data](http://www.aclweb.org/anthology/P09-1113) | |
 
-**Cite**: [Exploring DBpedia and Wikipedia for Portuguese Semantic Relationship Extraction](papers/minwise-linguamtica-13.pdf)
 
-**Description**: A collections of sentences in Portuguese that express semantic relationships between pairs of entities extracted from
-DBPedia. The sentences were collected by distant supervision, and were than manuall revised.
+(+) Obtained from results in the paper "Neural Relation Extraction with Selective Attention over Instances"
 
----
+### SemEval-2010 Task 8
 
-### AImed
+[SemEval-2010](http://www.aclweb.org/anthology/S10-1006) introduced 'Task 8 - Multi-Way Classification of Semantic
+Relations Between Pairs of Nominals'. The task is, given a sentence and two tagged nominals, to predict the relation
+between those nominals *and* the direction of the relation. The dataset contains nine general semantic relations
+together with a tenth 'OTHER' relation.
 
+Example:
+ > There were apples, **pears** and oranges in the **bowl**.
 
-**Dateset**: [aimed.tar.gz](datasets/aimed.tar.gz)
+ `(content-container, pears, bowl)`
 
-**Cite**: [Subsequence Kernels for Relation Extraction](erk-nips-05.pdf)
+The main evaluation metric used is macro-averaged F1, averaged across the nine proper relationships (i.e. excluding the
+OTHER relation), taking directionality of the relation into account.
 
-**Description**: It consists of 225 Medline abstracts, of which 200 are known to describe interactions between human proteins, while the other 25 do not refer to any interaction. There are 4084 protein references and around 1000 tagged interactions in this dataset.
+Several papers have used additional data (e.g. pre-trained word embeddings, WordNet) to improve performance. The figures
+reported here are the highest achieved by the model using any external resources.
 
----
+#### End-to-End Models
 
-### SemEval 2007
+| Model                                  | F1    | Paper / Source  | Code           |
+| -------------------------------------- | ----- | --------------- | -------------- |
+| *CNN-based Models* |
+| Multi-Attention CNN (Wang et al. 2016) | **88.0** | [Relation Classification via Multi-Level Attention CNNs](http://aclweb.org/anthology/P16-1123) | [lawlietAi's Reimplementation](https://github.com/lawlietAi/relation-classification-via-attention-model) |
+| Attention CNN (Huang and Y Shen, 2016) | 84.3<br>85.9<sup>[\*](#footnote)</sup> | [Attention-Based Convolutional Neural Network for Semantic Relation Extraction](http://www.aclweb.org/anthology/C16-1238) |
+| CR-CNN (dos Santos et al., 2015)       | 84.1  | [Classifying Relations by Ranking with Convolutional Neural Network](https://www.aclweb.org/anthology/P15-1061) | [pratapbhanu's Reimplementation](https://github.com/pratapbhanu/CRCNN) |
+| CNN (Zeng et al., 2014)                | 82.7  | [Relation Classification via Convolutional Deep Neural Network](http://www.aclweb.org/anthology/C14-1220) | [roomylee's Reimplementation](https://github.com/roomylee/cnn-relation-extraction) |
+| *RNN-based Models* |
+| Entity Attention Bi-LSTM (Lee et al., 2019) | **85.2** | [Semantic Relation Classification via Bidirectional LSTM Networks with Entity-aware Attention using Latent Entity Typing](https://arxiv.org/abs/1901.08163) | [Official](https://github.com/roomylee/entity-aware-relation-classification) |
+| Hierarchical Attention Bi-LSTM (Xiao and C Liu, 2016) | 84.3 | [Semantic Relation Classification via Hierarchical Recurrent Neural Network with Attention](http://www.aclweb.org/anthology/C16-1119) |
+| Attention Bi-LSTM (Zhou et al., 2016)  | 84.0 | [Attention-Based Bidirectional Long Short-Term Memory Networks for Relation Classification](http://www.aclweb.org/anthology/P16-2034) | [SeoSangwoo's Reimplementation](https://github.com/SeoSangwoo/Attention-Based-BiLSTM-relation-extraction) |
+| Bi-LSTM (Zhang et al., 2015)           | 82.7<br>84.3<sup>[\*](#footnote)</sup> | [Bidirectional long short-term memory networks for relation classification](http://www.aclweb.org/anthology/Y15-1009) |
 
-**Dateset**: [SemEval2007-Task4.tar.gz](datasets/SemEval2007-Task4.tar.gz)
+<a name="footnote">*</a>: It uses external lexical resources, such as WordNet, part-of-speech tags, dependency tags, and named entity tags.
 
-**Cite**: [SemEval-2007 Task 04: Classification of Semantic Relations between Nominals](papers/semeval2007.pdf)
 
-**Description**: Small data set, containing 7 relationship types and a total of 1,529 annotated examples.
+#### Dependency Models
 
----
+| Model                               | F1    | Paper / Source  | Code           |
+| ----------------------------------- | ----- | --------------- | -------------- |
+| BRCNN (Cai et al., 2016)            | **86.3**  | [Bidirectional Recurrent Convolutional Neural Network for Relation Classification](http://www.aclweb.org/anthology/P16-1072) |
+| DRNNs (Xu et al., 2016)             | 86.1  | [Improved Relation Classification by Deep Recurrent Neural Networks with Data Augmentation](https://arxiv.org/abs/1601.03651) |
+| depLCNN + NS (Xu et al., 2015a)     | 85.6 | [Semantic Relation Classification via Convolutional Neural Networks with Simple Negative Sampling](https://www.aclweb.org/anthology/D/D15/D15-1062.pdf) |
+| SDP-LSTM (Xu et al., 2015b)         | 83.7  | [Classifying Relations via Long Short Term Memory Networks along Shortest Dependency Path](https://arxiv.org/abs/1508.03720) | [Sshanu's Reimplementation](https://github.com/Sshanu/Relation-Classification) |
+| DepNN (Liu et al., 2015)            | 83.6  | [A Dependency-Based Neural Network for Relation Classification](http://www.aclweb.org/anthology/P15-2047) |
+| FCN (Yu et al., 2014)               | 83.0  | [Factor-based compositional embedding models](https://www.cs.cmu.edu/~mgormley/papers/yu+gormley+dredze.nipsw.2014.pdf) |
+| MVRNN (Socher et al., 2012)         | 82.4  | [Semantic Compositionality through Recursive Matrix-Vector Spaces](http://aclweb.org/anthology/D12-1110) | [pratapbhanu's Reimplementation](https://github.com/pratapbhanu/MVRNN) |
 
-### SemEval 2010
 
-**Dateset**: [SemEval2010_task8_all_data.tar.gz](datasets/SemEval2010_task8_all_data.tar.gz)
+### TACRED
 
-**Cite**: [SemEval-2010 Task 8: Multi-Way Classification of Semantic Relations Between Pairs of Nominals](papers/semeval.pdf)
+[TACRED](https://nlp.stanford.edu/projects/tacred/) is a large-scale relation extraction dataset with 106,264 examples built over newswire and web text from the [corpus](https://catalog.ldc.upenn.edu/LDC2018T03) used in the yearly [TAC Knowledge Base Population (TAC KBP) challenges](https://tac.nist.gov/2017/KBP/index.html). Examples in TACRED cover 41 relation types as used in the TAC KBP challenges (e.g., _per:schools_attended_ and _org:members_) or are labeled as _no_relation_ if no defined relation is held. These examples are created by combining available human annotations from the TAC KBP challenges and crowdsourcing.
 
-**Description**: SemEval-2010 Task 8 as a multi-way classification task in which the label for each example must be chosen from the complete set of ten relations and the mapping from nouns to argument slots is not provided in advance. We also provide more data: 10,717 annotated examples, compared to 1,529 in SemEval-1 Task 4.
+Example:
+ > *Billy Mays*, the bearded, boisterious pitchman who, as the undisputed king of TV yell and sell, became an inlikely pop culture icon, died at his home in *Tampa*, Fla, on Sunday. 
 
----
+ `(per:city_of_death, Billy Mays, Tampa)`
 
-### ReRelEM
+The main evaluation metric used is micro-averaged F1 over instances with proper relationships (i.e. excluding the
+_no_relation_ type).
 
-**Dateset**: [ReRelEM.tar.gz](datasets/ReRelEM.tar.gz)
+| Model                                  | F1    | Paper / Source  | Code           |
+| -------------------------------------- | ----- | --------------- | -------------- |
+| C-GCN + PA-LSTM (Zhang et al. 2018) | **68.2** | [Graph Convolution over Pruned Dependency Trees Improves Relation Extraction](http://aclweb.org/anthology/D18-1244) | [Offical](https://github.com/qipeng/gcn-over-pruned-trees) |
+| PA-LSTM (Zhang et al, 2017) | 65.1 | [Position-aware Attention and Supervised Data Improve Slot Filling](http://aclweb.org/anthology/D17-1004) | [Official](https://github.com/yuhaozhang/tacred-relation) |
 
-**Cite**: [Relation detection between named entities: report of a shared task](papers/FreitasetalSEW2009.pdf)
 
-**Description**: First evaluation contest (track) for Portuguese whose goal was to detect and classify relations betweennamed entities in running text, called ReRelEM. Given a collection annotated with named entities belonging to ten different semantic categories, we marked all relationships between them within each document. We used the following fourfold relationship classification: identity, included-in, located-in, and other (which was later on explicitly detailed into twenty different relations).
 
----
+# FewRel
 
-### Wikipedia
+The Few-Shot Relation Classification Dataset (FewRel) is a different setting from the previous datasets. This dataset consists of 70K sentences expressing 100 relations annotated by crowdworkers on Wikipedia corpus. The few-shot learning task follows the N-way K-shot meta learning setting. It is both the largest supervised relation classification dataset as well as the largest few-shot learning dataset till now. 
 
-**Dateset**: [wikipedia_datav1.0.tar.gz](datasets/wikipedia_datav1.0.tar.gz)
+The public leaderboard is available on the [FewRel website](http://www.zhuhao.me/fewrel/).
 
-**Cite**: [Integrating Probabilistic Extraction Models and Data Mining to Discover Relations and Patterns in Text](papers/culotta06integrating.pdf)
-
-**Description**: We sampled 1127 paragraphs from 271 articles from the online encyclopedia Wikipedia and labeled a total of 4701 relation instances. In addition to a large set of person-to-person relations, we also included links between people and organizations, as well as biographical facts such as birthday and jobTitle. In all, there are 53 labels in the training data.
-
----
-
-### Web
-
-**Dateset**: [hlt-naacl08-data.txt](datasets/hlt-naacl08-data.txt)
-
-**Cite**: [Learning to Extract Relations from the Web using Minimal Supervision](papers/bunescu-acl07.pdf)
-
-**Description**: Corporate Acquisition Pairs and Person-Birthplace Pairs taken from the web. The corporate acquisition test set has a total of 995 instances, out of which 156 are positive. The person-birthplace test set has a total of 601 instances, and only 45 of them are positive.
-
----
-
-### BioNLP Shared Task
-
-**Dateset**: [BioNLP.tar.gz](datasets/BioNLP.tar.gz)
-
-**Cite**: [Overview of BioNLP Shared Task 2011](papers/W11-1801.pdf)
-
-**Description**: The task involves the recognition of two binary part-of relations between entities: PROTEIN-COMPONENT and SUBUNITCOMPLEX. The task is motivated by specific challenges: the identification of the components of proteins in text is relevant e.g. to the recognition of Site arguments (cf. GE, EPI and ID tasks), and relations between proteins and their complexes relevant to any task involving them. REL setup is informed by recent semantic relation tasks (Hendrickx et al., 2010). The task data, consisting of new annotations for GE data, extends a previously introduced resource (Pyysalo et al., 2009; Ohta et al., 2010a).
-
----
-
-### ADE-V2
-
-**Dateset**: [ADE-Corpus-V2.zip](datasets/ADE-Corpus-V2.zip)
-
-**Cite**: [Development of a benchmark corpus to support the automatic extraction of drug-related adverse effects from medical case reports](papers/ADE-V2.pdf)
-
-**Description**: The work presented here aims at generating a systematically annotated corpus that can support the development and validation of methods for the automatic extraction of drug-related adverse effects from medical case reports. The documents are systematically double annotated in various rounds to ensure consistent annotations. The annotated documents are finally harmonized to generate representative consensus annotations. In order to demonstrate an example use case scenario, the corpus was employed to train and validate models for the classification of informative against the non-informative sentences. A Maximum Entropy classifier trained with simple features and evaluated by 10-fold cross-validation resulted in the F1 score of 0.70 indicating a potential useful application of the corpus. 
-
----
-
-### KBP-37
-
-**Dateset**: [kbp37-master.zip.zip](datasets/kbp37-master.zip)
-
-**Cite**: [Relation Classification via Recurrent Neural Network](papers/KBP37.pdf)
-
-**Description**: This dataset is a revision of MIML-RE annotation dataset, provided by Gabor Angeli et al. (2014). They use both the 2010 and 2013 KBP official document collections, as well as a July 2013 dump of Wikipedia as the text corpus for annotation, 33811 sentences been annotated. To make the dataset more suitable for our task, we made several refinement: 
-
-1. First, we add direction to the relation names, such that ‘per:employee of’ is splited into two relations ‘per:employee of(e1,e2)’ and ‘per:employee of(e2,e1)’ except for ‘no relation’. According to description of KBP task,3 we replace ‘org:parents’ with ‘org:subsidiaries’ and replace ‘org:member of’ with ‘org:member’ (by their reverse directions). This leads to 76 relations in the dataset.
-
-2. Then, we statistic the frequency of each relation with two directions separately. And relations with low frequency are discarded so that both directions of each relation occur more than 100 times in the dataset. To better balance the dataset, 80% ‘no relation’ sentences are also randomly discarded.
-
-3. After that, dataset are randomly shuffled and then sentences under each relation are all split into three groups, 70% for training, 10% for
-development, 20% for test. Finally, we remove those sentences in the development and test set whose entity pairs and relation are appeared in a training sentence simultaneously. 
-
-
-<br><br>
-
-
-
-
-
-
-<a name="oie"></a>
-# Open Information Extraction
-
-### ReVerb
-
-**Dateset**: [reverb_emnlp2011_data.tar.gz](datasets/emnlp2011_data.tar.gz)
-
-**Cite**: [Identifying Relations for Open Information Extraction](papers/Fader-emnlp11.pdf)
-
-**Description**: 500 sentences sampled from the Web, using Yahoo’s random link service.
-
----
-
-### ClausIE
-
-**Dateset**: [ClausIE-datasets.tar.gz](datasets/ClausIE-datasets.tar.gz)
-
-**Cite**: [ClausIE: Clause-Based Open Information Extraction](papers/delcorro13clausie.pdf)
-
-**Description**:
-
-Three different datasets. First, the Reverb dataset consists of 500 sentences with manually labeled extractions. The sentences have been obtained via the random-link service of Yahoo and are generally very noisy. Second, 200 random sentences from Wikipedia pages. These sentences are shorter, simpler, and less noisy than those of the Reverb dataset. Since some Wikipedia articles are written by non-native speakers, however, the Wikipedia sentences do contain some incorrect grammatical constructions. Third, 200 random sentences from the New York Times collection these sentences are generally very clean but tend to be long and complex.
-
----
-
-### Effectiveness and Efficiency of Open Relation Extraction
-
-**Dateset**: [emnlp13_ualberta_experiments_v2.zip](datasets/emnlp13_ualberta_experiments_v2.zip)
-
-**Cite**: [Effectiveness and Efficiency of Open Relation Extraction](papers/Effectiveness_OIE.pdf)
-
-**Description**: WEB-500 is a commonly used dataset, developed for the TextRunner experiments (Banko and Etzioni, 2008). These sentences are often incomplete and grammatically unsound, representing the challenges of dealing with web text. NYT-500 represents the other end of the spectrum with formal, well written new stories from the New York Times Corpus (Sandhaus, 2008). PENN-100 contains sentences from the Penn Treebank recently used in an evaluation of the TreeKernel method (Xu et al., 2013). We manually annotated the relations for WEB-500 and NYT-500 and use the PENN-100 annotations provided by TreeKernel’s authors (Xu et al., 2013).
-
----
-
-### Extracting Relation descriptors with Conditional Random Fields
-
-**Dateset**: [DataSet-IJCNLP2011.tar.gz](datasets/DataSet-IJCNLP2011.tar.gz)
-
-**Cite**: [Extracting Relation descriptors with Conditional Random Fields](papers/rel_descriptors_with_crf.pdf)
-
-**Description**: New York Times data set contains 150 business articles from New York Times. The articles were crawled from the NYT website between November 2009 and January 2010. After sentence splitting and tokenization, we used the Stanford NER tagger (URL: http://nlp.stanford.edu/ner/index.shtml) to identify PER and ORG named entities from each sentence. For named entities that contain multiple tokens we concatenated them into a single token. We then took each pair of (PER, ORG) entities that occur in the same sentence as a single candidate relation instance, where the PER entity is treated as ARG-1 and the ORG entity is treated as ARG-2.
-
-Wikipedia data was previously created by Aron Culotta et al.. Since the original data set did not contain the annotation information we need, we re-annotated it. Similarly, we performed sentence splitting, tokenization and NER tagging, and took pairs of (PER, PER) entities occurring in the same sentence as a candidate relation instance. We always treat the first PER entity as ARG-1 and the second PER entity as ARG-2.
-
-<br><br>
-
-<a name="ds"></a>
-# Distant Supervision for Relation Extraction
-
-### NYT dataset
-
-**Dateset**: [http://iesl.cs.umass.edu/riedel/ecml/](http://iesl.cs.umass.edu/riedel/ecml/)
-
-**Cite**: [Modeling Relations and Their Mentions without Labeled Text](papers/Ridel2010.pdf)
-
-**Description**: The NYT dataset is a widely used dataset on distantly supervisied relation extraction task. This dataset was generated by aligning freebase relations with the New York Times (NYT) corpus, with sentences from the years 2005-2006 used as the training corpus and sentences from 2007 used as the testing corpus.
-
----
-
-### Google's relation-extraction-corpus
-
-**Dateset**: [https://github.com/google-research-datasets/relation-extraction-corpus](https://github.com/google-research-datasets/relation-extraction-corpus)
-
-**Cite**: [https://research.googleblog.com/2013/04/50000-lessons-on-how-to-read-relation.html](https://research.googleblog.com/2013/04/50000-lessons-on-how-to-read-relation.html)
-
-**Description**: [https://research.googleblog.com/2013/04/50000-lessons-on-how-to-read-relation.html](https://research.googleblog.com/2013/04/50000-lessons-on-how-to-read-relation.html)
-
+[Go back to the README](../README.md)
