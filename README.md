@@ -1,4 +1,3 @@
-# Relation Extraxction
 Datasets of Annotated Semantic Relationships
 ============================================
 
