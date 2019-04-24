@@ -1,7 +1,7 @@
 # Previous Works Baseline
 ## Distant Supervision
 ### Dataset
-[New York Times (NYT) corpus]()
+[New York Times (NYT) corpus](http://iesl.cs.umass.edu/riedel/ecml/)
 ### Baseline
 - Mintz [Distant supervision for relation extraction without labeled data](http://www.aclweb.org/anthology/P09-1113)
 - MultiR [Knowledge-Based Weak Supervision for Information Extraction of Overlapping Relations](http://www.aclweb.org/anthology/P11-1055)
