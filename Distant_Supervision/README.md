@@ -18,15 +18,13 @@ Daojian](http://www.emnlp2015.org/proceedings/EMNLP/pdf/EMNLP203.pdf)
 
 | Models 	| Top100 	| Top200 	| Top500 	| Average 	|
 |--------	|--------	|--------	|--------	|---------	|
-|    Mintz    	|        	|        	|        	|         	|
-|   MultiR     	|        	|        	|        	|         	|
-|    MIMLRE    	|        	|        	|        	|         	|
-|    PCNN    	|        	|        	|        	|         	|
-|   MultiR     	|        	|        	|        	|         	|
-|    MIMLRE    	|        	|        	|        	|         	|
-|    PCNN+ATT    	|        	|        	|        	|         	|
-|   APCNN+D     	|        	|        	|        	|         	|
-|    BGWA    	|        	|        	|        	|         	|
-|    RESIDE    	|        	|        	|        	|         	|
-|    SEE-TRANS    	|        	|        	|        	|         	|
-|    LFDS    	|        	|        	|        	|         	|
+|    Mintz    	|0.77|0.71|0.55|0.676|
+|   MultiR     	|0.83|0.74|0.59|0.720|
+|    MIMLRE    	|0.85|0.75|0.61|0.737|
+|    PCNN    	  |0.84|0.77|0.64|0.750|
+|    PCNN+ATT   |0.86|0.83|0.73|0.807|
+|   APCNN+D     |0.87|0.83|0.74|0.813|
+|    BGWA    	  |0.82|0.75|-|-|
+|    RESIDE    	|0.84|0.79|-|-|
+|    SEE-TRANS  |0.91|0.87|0.77|0.850|
+|    LFDS    	  |0.90|0.88|0.83|0.869|
