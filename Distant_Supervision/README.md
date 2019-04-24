@@ -17,7 +17,16 @@ Daojian](http://www.emnlp2015.org/proceedings/EMNLP/pdf/EMNLP203.pdf)
 ### Accuracy
 
 | Models 	| Top100 	| Top200 	| Top500 	| Average 	|
-|:--------:	|--------	|--------	|--------	|---------	|
-|        	|        	|        	|        	|         	|
-|        	|        	|        	|        	|         	|
-|        	|        	|        	|        	|         	|
+|--------	|--------	|--------	|--------	|---------	|
+|    Mintz    	|        	|        	|        	|         	|
+|   MultiR     	|        	|        	|        	|         	|
+|    MIMLRE    	|        	|        	|        	|         	|
+|    PCNN    	|        	|        	|        	|         	|
+|   MultiR     	|        	|        	|        	|         	|
+|    MIMLRE    	|        	|        	|        	|         	|
+|    PCNN+ATT    	|        	|        	|        	|         	|
+|   APCNN+D     	|        	|        	|        	|         	|
+|    BGWA    	|        	|        	|        	|         	|
+|    RESIDE    	|        	|        	|        	|         	|
+|    SEE-TRANS    	|        	|        	|        	|         	|
+|    LFDS    	|        	|        	|        	|         	|
