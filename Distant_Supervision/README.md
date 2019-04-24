@@ -14,3 +14,10 @@ Daojian](http://www.emnlp2015.org/proceedings/EMNLP/pdf/EMNLP203.pdf)
 - RESIDE [RESIDE: Improving Distantly-Supervised Neural Relation Extraction using Side Information](http://malllabiisc.github.io/publications/papers/reside_emnlp18.pdf)
 - SEE-TRANS [SEE: Syntax-aware Entity Embedding for Neural Relation Extraction](http://arxiv.org/abs/1801.03603)
 - LFDS [Label-Free Distant Supervision for Relation Extraction via Knowledge Graph Embedding](http://aclweb.org/anthology/D18-1248)
+### Accuracy
+
+| Models 	| Top100 	| Top200 	| Top500 	| Average 	|
+|:--------:	|--------	|--------	|--------	|---------	|
+|        	|        	|        	|        	|         	|
+|        	|        	|        	|        	|         	|
+|        	|        	|        	|        	|         	|
