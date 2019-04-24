@@ -25,7 +25,7 @@ Daojian](http://www.emnlp2015.org/proceedings/EMNLP/pdf/EMNLP203.pdf)
 |    PCNN    	  |0.84|0.77|0.64|0.750|
 |    PCNN+ATT   |0.86|0.83|0.73|0.807|
 |   APCNN+D     |0.87|0.83|0.74|0.813|
-|    SEE-TRANS  |0.91|0.87|0.77|0.850|
+|    SEE-TRANS  |*0.91*|0.87|0.77|0.850|
 |    LFDS    	  |0.90|0.88|0.83|0.869|
 
 ### Precision
