@@ -27,7 +27,7 @@ Daojian](http://www.emnlp2015.org/proceedings/EMNLP/pdf/EMNLP203.pdf)
 |    SEE-TRANS  |0.91|0.87|0.77|0.850|
 |    LFDS    	  |0.90|0.88|0.83|0.869|
 
-
+### Precision
 |  	| One 	| One 	| One 	| Two 	| Two 	| Two 	| All 	| All 	| All 	|
 |------------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|-------	|
 | Models 	| P@100 	| P@200 	| P@300 	| P@100 	| P@200 	| P@300 	| P@100 	| P@200 	| P@300 	|
